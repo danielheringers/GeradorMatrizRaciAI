@@ -3,6 +3,7 @@ import { AIResponse, ChatMessage, RACIItem } from '../types/types';
 
 const MAX_MESSAGE_LENGTH = 500;
 
+
 export function useAI() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,8 +25,7 @@ export function useAI() {
     try {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Criar os dados com informações de grupo
-      const rawData = [
+      const rawData: RACIItem[] = [
         {
           atividade: "Rever estruturas (Plantas, Centros de Distribuição) inclusive para regiões incentivadas",
           suprimentos: "C",
@@ -208,14 +208,12 @@ export function useAI() {
         }
       ];
 
-      // Processar os dados para adicionar informações de agrupamento
       const processedData = rawData.reduce((acc: RACIItem[], curr, idx, arr) => {
         const item = { ...curr };
-        
-        // Se é o primeiro item ou o grupo mudou em relação ao anterior
+
         if (idx === 0 || arr[idx - 1].grupo !== curr.grupo) {
           item.isFirstInGroup = true;
-          // Contar quantos itens têm o mesmo grupo a partir daqui
+
           item.rowSpan = arr.slice(idx).filter(i => i.grupo === curr.grupo).length;
         }
         
@@ -230,7 +228,7 @@ export function useAI() {
       setResponse(mockResponse);
       const aiResponse = 'Aqui está a matriz RACI baseada na sua entrada.';
       setMessages(prev => [...prev, { role: 'ai', content: truncateMessage(aiResponse) }]);
-    } catch (err) {
+    } catch {
       setError('Falha ao gerar resposta. Por favor, tente novamente.');
       setMessages(prev => [...prev, { role: 'ai', content: 'Desculpe, encontrei um erro. Por favor, tente novamente.' }]);
     } finally {

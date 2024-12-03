@@ -79,7 +79,6 @@ export function RACIMatrix({ data, areaInfos = [] }: RACIMatrixProps) {
           {data.map((item, index) => (
             <TableRow key={index} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
               {columns.map((column) => {
-                // Se for a coluna Frente e não for o primeiro item do grupo, não renderiza a célula
                 if (column === "Frente" && !item.isFirstInGroup) {
                   return null;
                 }
