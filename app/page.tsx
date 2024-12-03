@@ -1,13 +1,12 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useAI } from '../hooks/useAI';
 import { AIPrompt } from '../components/AIPrompt';
 import { RACIMatrix } from '../components/RACIMatrix';
 import { AreaInfoForm } from '../components/AreaInfoForm';
 import { AreaInfoCard } from '../components/AreaInfoCard';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
-import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChatMessage } from '../types/types';
 
@@ -28,11 +27,11 @@ export default function Home() {
   const [areaInfos, setAreaInfos] = useState<AreaInfo[]>([]);
   const [showMatrix, setShowMatrix] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showInitialMessage, setShowInitialMessage] = useState(false);
   const [showCards, setShowCards] = useState(true);
 
   const handlePromptSubmit = useCallback((prompt: string) => {
-    console.log("Home: Prompt recebido:", prompt);
     setMessages(prev => [...prev, { role: 'user', content: prompt }]);
     
     if (prompt.toLowerCase() === 'iniciar') {
@@ -65,7 +64,7 @@ export default function Home() {
         }, 500);
       }, 1000);
     }
-  }, [currentAreaIndex, areas.length, setMessages, setShowMatrix, generateResponse]);
+  }, [currentAreaIndex, setMessages, setShowMatrix, generateResponse]);
 
   const handleFormClose = useCallback(() => {
     setShowForm(false);
@@ -115,7 +114,7 @@ export default function Home() {
                     exit={{ x: "100%", opacity: 0 }}
                     transition={{ duration: 0.5 }}
                   >
-                    {areaInfos.map((info, index) => (
+                    {areaInfos.map((info) => (
                       <motion.div
                         key={info.name}
                         initial={{ opacity: 0, scale: 0.8 }}
@@ -136,7 +135,6 @@ export default function Home() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
                   >
-                    {console.log("Area Infos being passed to RACIMatrix:", areaInfos)}
                     {response ? (
                       <RACIMatrix data={response.raci} areaInfos={areaInfos} />
                     ) : (
